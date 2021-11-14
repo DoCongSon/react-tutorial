@@ -1,3 +1,14 @@
+# React-Tutorial
+
+---
+
+## Copyright® by DoCongSon
+
+- ✔*Facebook :* [Đỗ Công Sơn](https://www.facebook.com/docongson2001)
+- ✔*Github :* [DoCongSon](https://github.com/DoCongSon)
+
+---
+
 # Hooks
 
 - Hooks là những hàm cho phép bạn “kết nối” React state và lifecycle vào các components sử dụng hàm.
