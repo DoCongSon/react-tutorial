@@ -44,25 +44,25 @@
   - `setState` và `innitState` có thể là hàm callback
   - set State là thay thế state cũ bằng giá trị mới (không ghi đè)
 
-  #### Data binding trong React
+#### Data binding trong React
 
-  - **Component:**
-    Tất cả các thành phần trong 1 trang web đều được hiểu là _component_. Với sự trợ giúp của virtual DOM, các _component_ đều được khởi tạo dưới dạng _Javascript Object_ và được chuyển đổi thành HTML DOM mỗi khi được render.
-  - **State và props:**
-    Dữ liệu trong React tất cả đều được quy về 2 loại, đó là _state_ và _props_.
-    - **State** là "trạng thái" của 1 component, nó có thể được khởi tạo bên trong component hoặc được truyền từ component cha. State có thể được thay đổi bên trong component.
-    - **Props** là các "thuộc tính" của 1 component, được truyền từ component cha. Khác với state, props không thể bị thay đổi bởi component sử dụng nó.
-  - **Luồng dữ liệu trong React:**
+- **Component:**
+  Tất cả các thành phần trong 1 trang web đều được hiểu là _component_. Với sự trợ giúp của virtual DOM, các _component_ đều được khởi tạo dưới dạng _Javascript Object_ và được chuyển đổi thành HTML DOM mỗi khi được render.
+- **State và props:**
+  Dữ liệu trong React tất cả đều được quy về 2 loại, đó là _state_ và _props_.
+  - **State** là "trạng thái" của 1 component, nó có thể được khởi tạo bên trong component hoặc được truyền từ component cha. State có thể được thay đổi bên trong component.
+  - **Props** là các "thuộc tính" của 1 component, được truyền từ component cha. Khác với state, props không thể bị thay đổi bởi component sử dụng nó.
+- **Luồng dữ liệu trong React:**
 
-    - dữ liệu trong React sẽ chỉ được truyền theo 1 chiều duy nhất, đó là từ component cha đến component con thông qua props. Không có chiều ngược lại (thực ra là bạn có thể làm ngược lại nhưng như vậy là trái với quan điểm của React).
-    - Câu hỏi đặt ra, liệu dữ liệu có thực sự được truyền theo 1 chiều duy nhất? Thường là không! Nhưng trong React, chúng ta coi việc truyền "thông tin" từ component con đến component cha là truyền "sự kiện". Trong sự kiện đó component con có thể đính kèm các thông tin của sự kiện (có thể là dữ liệu). Quá trình đó được hiểu là truyền sự kiện, không phải truyền dữ liệu.
+  - dữ liệu trong React sẽ chỉ được truyền theo 1 chiều duy nhất, đó là từ component cha đến component con thông qua props. Không có chiều ngược lại (thực ra là bạn có thể làm ngược lại nhưng như vậy là trái với quan điểm của React).
+  - Câu hỏi đặt ra, liệu dữ liệu có thực sự được truyền theo 1 chiều duy nhất? Thường là không! Nhưng trong React, chúng ta coi việc truyền "thông tin" từ component con đến component cha là truyền "sự kiện". Trong sự kiện đó component con có thể đính kèm các thông tin của sự kiện (có thể là dữ liệu). Quá trình đó được hiểu là truyền sự kiện, không phải truyền dữ liệu.
 
-    `Tóm lại, trong React, dữ liệu sẽ được truyền từ trên xuống, và sự kiện được truyền từ dưới lên.`
+  `Tóm lại, trong React, dữ liệu sẽ được truyền từ trên xuống, và sự kiện được truyền từ dưới lên.`
 
-  #### Mounted & Unmounted?
+#### Mounted & Unmounted?
 
-  - Mounted là thời điểm đưa Component vào sử dụng trong DOM
-  - Unmounted ngược lại với Mounted là thời điểm xoá bỏ Component khỏi DOM
+- Mounted là thời điểm đưa Component vào sử dụng trong DOM
+- Unmounted ngược lại với Mounted là thời điểm xoá bỏ Component khỏi DOM
 
 ---
 
@@ -165,7 +165,7 @@
   };
 
   const Child = (prop) => {
-    console.log("fuction called....");
+    console.log("function called....");
     let counter = 0;
     let [myState, setMyState] = useState("A");
 
@@ -205,7 +205,7 @@
   };
 
   const Child = (prop) => {
-    console.log("fuction called....");
+    console.log("function called....");
     let counter = useRef(0);
     let [myState, setMyState] = useState("A");
 
@@ -234,3 +234,187 @@
   ```
 
   bậy giờ sau khi component được re-render thì counter không bị dặt lại giá trị và chúng ta thu được kết quả mong muốn
+
+#### React.memo() HOC
+
+- **Class components** có thể **skip** việc **render** khi props được truyền vào là giống nhau bằng cách sử dụng **PureComponent** hoặc **shouldComponentUpdate**. Bây giờ bạn cũng có thể làm điều này tương tự với **function components** bằng cách gói chúng trong **React.memo.**
+- **React.memo** là một **higher order component**. Nó tương tự như **React.PureComponent** nhưng dành cho **function components** thay vì là class.
+- **cách dùng:**
+  ```jsx
+  const MyComponent = React.memo(function MyComponent(props) {
+    /* Chỉ render khi props thay đổi */
+  });
+  ```
+- Nếu function component của bạn render cùng một kết quả được cung cấp cùng một props. Bạn có thể gói nó trong React.memo để giúp tăng hiệu suất trong một số trường hợp bằng cách ghi nhớ kết quả. Điều này có nghĩa là React sẽ bỏ qua việc render component và sử dụng lại kết quả được render cuối cùng.
+
+---
+
+### useCallBack() hook
+
+- câu lênh:
+  ```jsx
+  useCallback(callback function, dependencies);
+  ```
+- **useCallback** tập trung giải quyết vấn đề về performance, khi mà các `callback function` được tạo ở functional component cha pass xuống component con luôn bị tạo mới, khiến cho con luôn bị `re-render`.
+- **useCallback** trả về một `function` (chính là function bạn pass vào ứng với tham số thứ nhất), `callback function` này sẽ được tạo lại khi một trong số các `dependencies` thay đổi. Nếu `dependencies` không đổi, function trả về sẽ là function trước đó -> tức là function pass xuống component con không bị tạo mới, tương đương không có object được tạo mới -> component con không bị `re-render`.
+- Tóm lại **useCallback** giữ cho một hàm không được tạo lại lần nữa, dựa trên mảng các phần phụ thuộc. Nó sẽ trả về chính function đó. Sử dụng nó khi mà bạn muốn truyền function vào component con và chặn không cho một hàm nào đó tiêu thời gian, tài nguyên phải tạo lại.
+
+---
+
+### useMemo() hook
+
+- **useMemo** cũng giống như khái niệm **React memo**, nhưng có sự khác biệt rõ ràng. Nếu như React memo sinh ra với mục địch tránh việc rerender nhiều lần thì _useMemo tránh cho việc tính toán lại một function lặp đi lặp lại nhiều lần mỗi lần component re-render_. Bản chất useMemo là caching lại giá trị return của function, mỗi lần component rerender nó sẽ kiểm tra giá trị tham số truyền vào function nếu giá trị đó không thay đổi, thì return value đã caching trong memory. Ngược lại nếu giá trị tham số truyền vào thay đổi, nó sẽ thực hiện tính toán lại vào trả về value, sao đó caching lại value cho những lần rerender tiếp theo.
+- cách sử dụng: tương đối giống với **useCallback** cũng có tham số truyền vào là callback function và dependencies
+
+  ```jsx
+  useMemo(() => {
+    // logic code
+
+    return result;
+  }, [dependencies]);
+  ```
+
+  khi sử dụng useMemo như trên thì callback function chỉ bị thực hiện lại khi dependencies thay đổi đãn tới kết quả result thay đổi
+
+---
+
+### useReduce() hook
+
+- **Từ useState đến useReducer**
+
+  - Vậy nếu trong trường hợp logic state của component trở nên lớn và phức tạp hợp thì khi đó dùng ta sẽ dùng một hàm hook là `useReducer` sẽ giúp chúng ta dễ quản lý và tổ chức state tốt hơn.
+  - Vậy `useReducer` là gì, thực chất là là một phiên bản nâng cao của `useState`, dùng trong trường hợp local state của component phức tạp, có nhiều action làm thay đổi state đó. Thay vì các bạn dùng nhiều `useState` hoặc `useState` với value là nested object/array và viết nhiều function để thay đổi state thì bây giờ các bạn có thể tổ chức state và các action làm thay đổi state đó 1 cách logic nhờ `useReducer`
+
+- **Reducer là gì**
+
+  - Để sử dụng `useReducer hook`; đầu tiên chúng ta cần biết `reducer` là gì, đơn giản là một hàm có 2 tham số là **state**, **action** và trả về **new state** sau khi thực hiện một **action**, hãy tưởng tượng reducer như là một bộ chuyển đổi, nhận input, thực hiện action tác động đến input đó, rồi tạo ra output.
+    ```jsx
+    (state, action) => newState;
+    ```
+  - Chúng ta cùng xem qua một reducer cụ thể nhé:
+
+    ```jsx
+    const todoReducer = (state, action) => {
+      switch (action.type) {
+        case "DO_TODO":
+          return state.map((todo) => {
+            if (todo.id === action.id) {
+              return { ...todo, complete: true };
+            } else {
+              return todo;
+            }
+          });
+        case "UNDO_TODO":
+          return state.map((todo) => {
+            if (todo.id === action.id) {
+              return { ...todo, complete: false };
+            } else {
+              return todo;
+            }
+          });
+        default:
+          return state;
+      }
+    };
+    ```
+
+    Ở trên là một Todo reducer; state ban đầu là list items todo, có 2 kiểu action type để chuyển đổi 2 trạng thái tương ứng của item là complete: true or false.
+
+  - Và sử sụng todoReducer đó như sau:
+
+    ```jsx
+    const initialTodos = [
+      {
+        id: "a",
+        task: "Learn React",
+        complete: false,
+      },
+      {
+        id: "b",
+        task: "Learn Firebase",
+        complete: false,
+      },
+    ];
+
+    const action = {
+      type: "DO_TODO",
+      id: "a",
+    };
+
+    const newTodos = todoReducer(initialTodos, action);
+
+    console.log(newTodos);
+    // [
+    //   {
+    //     id: 'a',
+    //     task: 'Learn React',
+    //     complete: true,
+    //   },
+    //   {
+    //     id: 'b',
+    //     task: 'Learn Firebase',
+    //     complete: false,
+    //   },
+    // ]
+    ```
+
+    Đó là 1 ví dụ đơn giản về reducer, cũng dễ hiểu đúng không nào, và bây giờ chúng ta cùng tìm hiểu useReducer hook trong React nhé
+
+- **useReducer()  hook**
+
+  - Như đã nói ở trên **useReducer** hook được sử dụng trong trường hợp component có state phức tạp và có nhiều action type làm thay đổi state đó.
+
+  - `useReducer function` nhận vào **reducer** và **initialState** khởi tạo ban đầu, trả về **state** hiện tại và **dispatch function** dùng để trigger 1 action
+
+  - Ok, chúng ta sẽ viết một TodoApp có thể render ra list item và toggle item đó đã hoàn thành hay chưa nhé, mình sẽ sử dụng lại **todoReducer** và **initialTodos** như trên nhé
+
+    ```jsx
+    import React from 'react';
+
+    const initialTodos = [...]; // same as above
+    const todoReducer = (state, action) => newState; //same as above
+
+    const App = () => {
+      const [todos, dispatch] = React.useReducer(
+        todoReducer,
+        initialTodos
+      );
+
+      const handleChange = todo => {
+        dispatch({
+          type: todo.complete ? 'UNDO_TODO' : 'DO_TODO',
+          id: todo.id,
+        });
+      };
+
+      return (
+        <ul>
+          {todos.map(todo => (
+            <li key={todo.id}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={todo.complete}
+                  onChange={() => handleChange(todo)}
+                />
+                {todo.task}
+              </label>
+            </li>
+          ))}
+        </ul>
+      );
+    };
+
+    export default App;
+    ```
+
+  - Ở ví dụ trên:
+
+    - React.useReducer: dòng này sử dụng useReducer với 2 tham số todoReducer và initialTodos, trả về todos hiện tại và dispatch dùng để send action đến reducer làm thay đổi list todos
+    - handleChange: hàm này dùng để dispatch action chuyển đổi trạng thái của item là hoàn thành or chưa hoàn thành
+    - Tiếp theo chúng ta sẽ render ra list item todos đi kèm với 1 checkbox để switch trạng thái complete của item đó, mỗi lần check or uncheck thì sẽ call handleChange
+    - Mỗi lần switch trạng thái hoàn thành như vậy sẽ update todos và component sẽ được render lại với list todos vừa được update
+  
+- **Kết Luận**
+
+  `React useReducer hook là một cách hữu ích để quản lý state trong React bên cạnh useState, và nó có thể kết hợp với context dùng để quản lý state trong một ứng dụng mà có thể không cần sử dụng đến redux`
