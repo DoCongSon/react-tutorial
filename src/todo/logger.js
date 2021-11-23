@@ -12,5 +12,4 @@ const logger = reducer => {
         return newState
     }
 }
-6ff
 export default logger;

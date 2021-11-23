@@ -360,7 +360,7 @@
 
     Đó là 1 ví dụ đơn giản về reducer, cũng dễ hiểu đúng không nào, và bây giờ chúng ta cùng tìm hiểu useReducer hook trong React nhé
 
-- **useReducer()  hook**
+- **useReducer() hook**
 
   - Như đã nói ở trên **useReducer** hook được sử dụng trong trường hợp component có state phức tạp và có nhiều action type làm thay đổi state đó.
 
@@ -414,7 +414,145 @@
     - handleChange: hàm này dùng để dispatch action chuyển đổi trạng thái của item là hoàn thành or chưa hoàn thành
     - Tiếp theo chúng ta sẽ render ra list item todos đi kèm với 1 checkbox để switch trạng thái complete của item đó, mỗi lần check or uncheck thì sẽ call handleChange
     - Mỗi lần switch trạng thái hoàn thành như vậy sẽ update todos và component sẽ được render lại với list todos vừa được update
-  
+
 - **Kết Luận**
 
   `React useReducer hook là một cách hữu ích để quản lý state trong React bên cạnh useState, và nó có thể kết hợp với context dùng để quản lý state trong một ứng dụng mà có thể không cần sử dụng đến redux`
+
+---
+
+### useContext() hook
+
+- **Đặt vấn đề**
+  - Nếu không có React Context, chúng ta sẽ sử dụng kỹ thuật là “prop drilling” trong đó chúng ta sẽ phải truyền data xuống các component mặc dù một số component không cần dữ liệu đó.
+  - Việc sử dụng “prop drilling” thì việc truyền dữ liệu đến các component con lồng nhau sâu sẽ rất cồng kềnh.
+  - Do đó, React Context xuất hiện để khắc phục những nhược điểm của “prop drilling”.
+  - **React Context** sẽ cho phép chúng ta có thể tạo data và truyền nó với một provider đến tất cả component trong ứng dụng React mà không cần dùng “prop drilling”.
+- **Cách sử dụng React Context**
+
+  để hiểu rõ cách dùng cũng như cách hoạt động của useContext ta cùng làm 1 ví dụ sau.
+
+  - **1. Tạo Food Context**
+
+    ```jsx
+    import React, { createContext, useState } from "react";
+    // Initiate Context
+    const FoodContext = createContext();
+    // Provide Context
+    export const FoodProvider = ({ children }) => {
+      const [name, setName] = useState("Trà Xanh");
+      const [location, setLocation] = useState("Thái Nguyên");
+      return (
+        <FoodContext.Provider value={{ name, location, setName, setLocation }}>
+          {children}
+        </FoodContext.Provider>
+      );
+    };
+
+    export default FoodContext;
+    ```
+
+    Ở đây, tạo hàm **provider** để cung cấp **context** vừa khởi tạo. Hàm này sẽ là cha của tất cả **component** khác trong ứng dụng này.
+
+    Và những dữ liệu trong **value** như **name**,**location**,**setName…** sẽ có thể được truy cập từ tất cả **child components**.
+
+    Cuối cùng là export **FoodContext** để tất cả **child components** của **FoodProvider** có thể sử dụng.
+
+  - **2. Wrap the App component với Context.**
+
+    **Context** là _global variable._
+
+    Để context data có sẵn trong toàn bộ ứng dụng thì trong `index.js` chúng ta import FoodProvider và wrap `<App /> `.
+
+    ```jsx
+    import React from "react";
+    import ReactDOM from "react-dom";
+    import "./index.css";
+    import App from "./App";
+    import { FoodProvider } from "./FoodContext";
+
+    ReactDOM.render(
+      <FoodProvider>
+        <App />
+      </FoodProvider>,
+      document.getElementById("root")
+    );
+    ```
+
+  - **3. Sử dụng name và location trong components.**
+    Trong `NameComponent.jsx` import FoodContext dùng hook `useContext`.
+
+    ```jsx
+    import React, { useContext } from "react";
+    import FoodContext from "../FoodContext";
+
+    const NameComponent = () => {
+      //Retrieve context data
+      const food = useContext(FoodContext);
+
+      return (
+        <div style={{ marginTop: "30px" }}>
+          <h2 className="is-size-4">
+            <strong>Name</strong>: {food.name}
+          </h2>
+        </div>
+      );
+    };
+    ```
+
+    Tương tự với `LocationComponent.jsx`
+
+    ```jsx
+    import React, { useContext } from "react";
+    import FoodContext from "../FoodContext";
+
+    const LocationComponent = () => {
+      // Retrieve context data
+      const food = useContext(FoodContext);
+
+      return (
+        <div style={{ marginTop: "30px", marginLeft: "50px" }}>
+          <h2 className="is-size-4">
+            <strong>Location</strong>: {food.location}
+          </h2>
+        </div>
+      );
+    };
+    ```
+
+  - **4. Cách update data trong context**
+
+    Tương tự, trong `FoodForm.jsx` ta cũng import FoodContext và sử dụng hook `useContext` để lấy context data.
+
+    ```jsx
+    import React, { useContext } from "react";
+    import FoodContext from "./FoodContext";
+
+    const FoodForm = () => {
+      // Retrieve context data
+      const food = useContext(FoodContext);
+
+      return (
+        <div className="food-form">
+          <div className="input-item">
+            <label className="label" style={{ marginRight: "28px" }}>
+              Update Name:{" "}
+            </label>
+            <input
+              className="input"
+              onChange={(e) => food.setName(e.target.value)}
+            />
+          </div>
+
+          <div className="input-item">
+            <label className="label">Update Location: </label>
+            <input
+              className="input"
+              onChange={(e) => food.setLocation(e.target.value)}
+            />
+          </div>
+        </div>
+      );
+    };
+    export default FoodForm;
+    ```
