@@ -1,6 +1,6 @@
 import { useState } from "react"
 // mặc đỊnh nếu không trỏ đên file js nào thì nó sẽ tủ động tìm đến index.js như sau:
-import Context from "./useContext";
+import TodoApp from "./TodoApp";
 
 function App() {
   const mounted = localStorage.getItem("mount")
@@ -11,7 +11,7 @@ function App() {
         setIsMounted(!isMounted);
         localStorage.setItem("mount", !isMounted);
       }}>toggle</button>
-      {isMounted && <Context />}
+      {isMounted && <TodoApp />}
     </div>
   );
 }
