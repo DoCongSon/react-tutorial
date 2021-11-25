@@ -556,3 +556,49 @@
     };
     export default FoodForm;
     ```
+
+---
+
+### useImperativeHandle() hook
+
+- **useImperativeHandle**: có chức năng giúp Component child có thể tùy chỉnh các trả về ref cho Component cha. `useImperativeHandle` phải đi kèm với `forwardRef`
+
+- Việc sử dụng nó bản chất hỗ trợ thêm cho ref, cần tránh hạn chế dùng trong tất cả các trường hợp nhằm bảo toàn tính toàn vẹn của dữ liệu
+
+- **ví dụ:**
+
+  - ở component con:
+
+    ```jsx
+    import React, { useRef, useImperativeHandle, forwardRef } from "react";
+
+    function ChildInput(props, ref) {
+      const inputRef = useRef();
+      useImperativeHandle(ref, () => inputRef.current);
+
+      return <input type="text" ref={inputRef} />;
+    }
+
+    export default forwardRef(ChildInput);
+    ```
+
+  - ở component cha:
+
+    ```jsx
+    import React, { useEffect, useRef } from "react";
+    import ChildInput from "./ChildInput";
+
+    export function ImperativeHandle() {
+      const inputRef = useRef();
+
+      useEffect(() => {
+        inputRef.current.focus();
+      }, []);
+
+      return (
+        <div>
+          <ChildInput ref={inputRef} />
+        </div>
+      );
+    }
+    ```
